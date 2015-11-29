@@ -15,6 +15,7 @@
 		FAAC6E011C0247F800D6D947 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAAC6DFF1C0247F800D6D947 /* LaunchScreen.storyboard */; };
 		FAAC6E0C1C02803800D6D947 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC6E0B1C02803800D6D947 /* Weather.swift */; };
 		FAAC6E0F1C028D7D00D6D947 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC6E0E1C028D7D00D6D947 /* Constants.swift */; };
+		FAAC6E131C03709300D6D947 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAAC6E121C03709300D6D947 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		FAAC6E021C0247F800D6D947 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAAC6E0B1C02803800D6D947 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		FAAC6E0E1C028D7D00D6D947 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		FAAC6E121C03709300D6D947 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAAC6E131C03709300D6D947 /* CoreLocation.framework in Frameworks */,
 				8A3DC061F58FAE812A65AF3C /* Pods_CurrentWeather.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,6 +50,7 @@
 		14D396C6A2188D6B9661C116 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAAC6E121C03709300D6D947 /* CoreLocation.framework */,
 				8DCB77CE230303F617273236 /* Pods_CurrentWeather.framework */,
 			);
 			name = Frameworks;

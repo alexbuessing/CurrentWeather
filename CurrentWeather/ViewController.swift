@@ -9,6 +9,9 @@
 import UIKit
 import CoreLocation
 
+var latitude: CLLocationDegrees = 43.2065
+var longitude: CLLocationDegrees = -71.5365
+
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var timeDay: UILabel!
@@ -25,53 +28,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet var backgroundImg: UIImageView!
     
     var timer: NSTimer!
-    var weather = Weather()
-    var locationManager = CLLocationManager()
+    var weather: Weather!
+    var locationMan = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        
+        locationMan.delegate = self
+        locationMan.desiredAccuracy = kCLLocationAccuracyBest
+        locationMan.requestWhenInUseAuthorization()
+        locationMan.startUpdatingLocation()
+    
         startTime()
         
-        weather.downloadWeatherDetails { () -> () in
-            
-            self.updateUI()
-            
-        }
-        
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        let userLocation: CLLocation = locations[0]
-        
-        let latitude = userLocation.coordinate.latitude
-        let longitude = userLocation.coordinate.longitude
-        
-        print("lat: \(latitude), lon: \(longitude)")
-    }
-    
-    func updateUI() {
-        
-        weather.getImage(weather.weatherId)
-        weatherDesc.text = weather.weatherDesc
-        weatherImg.image = weather.mainImg
-        backgroundImg.image = weather.bgImg
-        locationLbl.text = weather.location
-        windSpeed.text = "\(weather.windSpeed) MPH"
-        humidity.text = weather.humidity + "%"
-        currentTemp.text = weather.kelvinToFarenheit(weather.currentTemp) + "º"
-        pressure.text = weather.toInchMercury(weather.pressure) + " InHg"
-        sunset.text = weather.sunset
-        sunrise.text = weather.sunrise
-
-    }
-
     func startTime() {
         
         timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "getTimeAndDay", userInfo: nil, repeats: true)
@@ -92,7 +63,57 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let time = String(fullTime[0].characters.dropLast(3))
         timeDay.text = "\(time) \(morningAfternoon) \(day)"
     }
+    
+    func updateUI() {
+        
+        weather.getImage(weather.weatherId)
+        weatherDesc.text = weather.weatherDesc
+        weatherImg.image = weather.mainImg
+        backgroundImg.image = weather.bgImg
+        locationLbl.text = weather.location
+        windSpeed.text = "\(weather.windSpeed) MPH"
+        humidity.text = weather.humidity + "%"
+        currentTemp.text = weather.kelvinToFarenheit(weather.currentTemp) + "º"
+        pressure.text = weather.toInchMercury(weather.pressure) + " InHg"
+        sunset.text = weather.sunset
+        sunrise.text = weather.sunrise
+    }
 
+    func changeLocation(lat: CLLocationDegrees, lon: CLLocationDegrees) {
+        
+        COORDINATE_URL = "lat=\(lat)&lon=\(lon)"
+        
+    }
+    
+    func waitForDownload() {
+        
+        weather.downloadWeatherDetails { () -> () in
+            
+            self.updateUI()
+
+        }
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == .AuthorizedWhenInUse {
+            latitude = locationMan.location!.coordinate.latitude
+            longitude = locationMan.location!.coordinate.longitude
+            changeLocation(latitude, lon: longitude)
+            weather = Weather()
+            waitForDownload()
+
+        }
+    }
+    
+    @IBAction func refreshedPressed(sender: AnyObject) {
+        latitude = locationMan.location!.coordinate.latitude
+        longitude = locationMan.location!.coordinate.longitude
+        changeLocation(latitude, lon: longitude)
+        waitForDownload()
+        
+    }
+    
     
 }
 

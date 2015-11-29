@@ -113,7 +113,7 @@ class Weather {
     
     var bgImg: UIImage {
         if _bgImg == nil {
-            _bgImg = UIImage(named:"cloudybg.jpg")
+            _bgImg = UIImage(named: "cloudybg.jpg")
         }
         return _bgImg
     }
@@ -146,37 +146,153 @@ class Weather {
         
         switch weatherId {
         case 200...232:
-            image1 = UIImage(named: "thunderstorms.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "thunderstorms.jpg")
+                image2 = UIImage(named: "thunderstormbg.jpg")
+            } else {
+                image1 = UIImage(named: "thunderstormnight.jpg")
+                image2 = UIImage(named: "thunderstormnightbg.jpg")
+            }
         case 300...321:
-            image1 = UIImage(named: "rain.jpg")
-            image2 = UIImage(named: "rainbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "rain.jpg")
+                image2 = UIImage(named: "rainbg.jpg")
+            } else {
+                image1 = UIImage(named: "rainynight.jpg")
+                image2 = UIImage(named: "nightrainbg.jpg")
+            }
         case 500...531:
-            image1 = UIImage(named: "rain.jpg")
-            image2 = UIImage(named: "rainbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "rain.jpg")
+                image2 = UIImage(named: "rainbg.jpg")
+            } else {
+                image1 = UIImage(named: "rainynight.jpg")
+                image2 = UIImage(named: "nightrainbg.jpg")
+            }
         case 600...622:
-            image1 = UIImage(named: "snow.jpg")
-            image2 = UIImage(named: "snowbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "snow.jpg")
+                image2 = UIImage(named: "snowbg.jpg")
+            } else {
+                image1 = UIImage(named: "snow.jpg")
+                image2 = UIImage(named: "snowynightbg.jpg")
+            }
         case 700...781:
-            image1 = UIImage(named: "sun.jpg")
-            image2 = UIImage(named: "sunbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "sun.jpg")
+                image2 = UIImage(named: "sunbg.jpg")
+            } else {
+                image1 = UIImage(named: "clearnight.jpg")
+                image2 = UIImage(named: "clearnightbg.jpg")
+            }
         case 800:
-            image1 = UIImage(named: "sun.jpg")
-            image2 = UIImage(named: "sunbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "sun.jpg")
+                image2 = UIImage(named: "sunbg.jpg")
+            } else {
+                image1 = UIImage(named: "clearnight.jpg")
+                image2 = UIImage(named: "clearnightbg.jpg")
+            }
         case 801...804:
-            image1 = UIImage(named: "partlycloudy.jpg")
-            image2 = UIImage(named: "cloudybg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "partlycloudy.jpg")
+                image2 = UIImage(named: "cloudybg.jpg")
+            } else {
+                image1 = UIImage(named: "cloudynight.jpg")
+                image2 = UIImage(named: "cloudynightbg.jpg")
+            }
         case 900...906:
-            image1 = UIImage(named: "thunderstorms.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "thunderstorms.jpg")
+                image2 = UIImage(named: "thunderstormbg.jpg")
+            } else {
+                image1 = UIImage(named: "thunderstormnight.jpg")
+                image2 = UIImage(named: "thunderstormnightbg.jpg")
+            }
         case 951...962:
             image1 = UIImage(named: "windy.jpg")
+            image2 = UIImage(named: "windybg.jpg")
         default:
-            image1 = UIImage(named: "sun.jpg")
-            image2 = UIImage(named: "sunbg.jpg")
+            if isDaytime() == true {
+                image1 = UIImage(named: "sun.jpg")
+                image2 = UIImage(named: "sunbg.jpg")
+            } else {
+                image1 = UIImage(named: "clearnight.jpg")
+                image2 = UIImage(named: "clearnightbg.jpg")
+            }
         }
         
         _mainImg = image1
         _bgImg = image2
         
+    }
+    
+    func isDaytime() -> Bool {
+    
+        let str = getTimeAndDay()
+        var strArr = str.componentsSeparatedByString(" ")
+        var currentTime = strArr[0].componentsSeparatedByString(":")
+        currentTime.append(strArr[1])
+        
+        var sunriseArr = _sunrise.componentsSeparatedByString(":")
+        sunriseArr.append(sunriseArr[1].componentsSeparatedByString(" ")[0])
+        let testArr = _sunrise.componentsSeparatedByString(" ")
+        sunriseArr.removeAtIndex(1)
+        sunriseArr.append(testArr[1])
+        
+        var sunsetArr = _sunset.componentsSeparatedByString(":")
+        sunsetArr.append(sunsetArr[1].componentsSeparatedByString(" ")[0])
+        let testsArr = _sunset.componentsSeparatedByString(" ")
+        sunsetArr.removeAtIndex(1)
+        sunsetArr.append(testsArr[1])
+        
+        if Int(currentTime[0])! == 12 && currentTime[2] == "PM" {
+            return true
+        } else if Int(currentTime[0])! == 12 && currentTime[2] == "AM" {
+            
+            return false
+            
+        } else if (Int(currentTime[0])! >= Int(sunriseArr[0])! && currentTime[2] == sunriseArr[2]) {
+            
+            if Int(currentTime[1])! >= Int(sunsetArr[1])! {
+                return true
+            } else {
+                return false
+            }
+        
+        } else if (Int(currentTime[0])! <= Int(sunsetArr[0])! && currentTime[2] == sunsetArr[2]) {
+            
+            if Int(currentTime[1])! < Int(sunsetArr[1])! {
+                return true
+            } else {
+                return false
+            }
+            
+        } else {
+            return false
+        }
+    
+    }
+    
+    func startTime() {
+        
+        timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "getTimeAndDay", userInfo: nil, repeats: true)
+        
+    }
+    
+    func getTimeAndDay() -> String {
+        let date = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .FullStyle
+        let dayArr = String(formatter.stringFromDate(date)).componentsSeparatedByString(" ")
+        let day = dayArr[0].stringByReplacingOccurrencesOfString(",", withString: "")
+        let date2 = NSDate()
+        let formatter2 = NSDateFormatter()
+        formatter2.timeStyle = .FullStyle
+        var fullTime = String(formatter2.stringFromDate(date2)).componentsSeparatedByString(" ")
+        let morningAfternoon = fullTime[1]
+        let time = String(fullTime[0].characters.dropLast(3))
+        return "\(time) \(morningAfternoon) \(day)"
     }
 
     
