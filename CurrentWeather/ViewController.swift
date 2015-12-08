@@ -103,6 +103,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             weather = Weather()
             waitForDownload()
 
+        } else {
+            print("Phone does not have users location")
         }
     }
     

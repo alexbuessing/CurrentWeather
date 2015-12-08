@@ -248,18 +248,6 @@ class Weather {
         var sunriseArr = parseTime(_sunrise)
         var sunsetArr = parseTime(_sunset)
         
-//        var sunriseArr = _sunrise.componentsSeparatedByString(":")
-//        sunriseArr.append(sunriseArr[1].componentsSeparatedByString(" ")[0])
-//        let testArr = _sunrise.componentsSeparatedByString(" ")
-//        sunriseArr.removeAtIndex(1)
-//        sunriseArr.append(testArr[1])
-        
-//        var sunsetArr = _sunset.componentsSeparatedByString(":")
-//        sunsetArr.append(sunsetArr[1].componentsSeparatedByString(" ")[0])
-//        let testsArr = _sunset.componentsSeparatedByString(" ")
-//        sunsetArr.removeAtIndex(1)
-//        sunsetArr.append(testsArr[1])
-        
         if Int(currentTime[0])! == 12 && currentTime[2] == "PM" {
             return true
         } else if Int(currentTime[0])! == 12 && currentTime[2] == "AM" {
