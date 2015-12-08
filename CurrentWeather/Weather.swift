@@ -227,6 +227,17 @@ class Weather {
         
     }
     
+    func parseTime(time: String) -> Array<String> {
+        
+        var arrayContainer = time.componentsSeparatedByString(":")
+        arrayContainer.append(arrayContainer[1].componentsSeparatedByString(" ")[0])
+        let testArray = time.componentsSeparatedByString(" ")
+        arrayContainer.removeAtIndex(1)
+        arrayContainer.append(testArray[1])
+        
+        return arrayContainer
+    }
+    
     func isDaytime() -> Bool {
     
         let str = getTimeAndDay()
@@ -234,17 +245,20 @@ class Weather {
         var currentTime = strArr[0].componentsSeparatedByString(":")
         currentTime.append(strArr[1])
         
-        var sunriseArr = _sunrise.componentsSeparatedByString(":")
-        sunriseArr.append(sunriseArr[1].componentsSeparatedByString(" ")[0])
-        let testArr = _sunrise.componentsSeparatedByString(" ")
-        sunriseArr.removeAtIndex(1)
-        sunriseArr.append(testArr[1])
+        var sunriseArr = parseTime(_sunrise)
+        var sunsetArr = parseTime(_sunset)
         
-        var sunsetArr = _sunset.componentsSeparatedByString(":")
-        sunsetArr.append(sunsetArr[1].componentsSeparatedByString(" ")[0])
-        let testsArr = _sunset.componentsSeparatedByString(" ")
-        sunsetArr.removeAtIndex(1)
-        sunsetArr.append(testsArr[1])
+//        var sunriseArr = _sunrise.componentsSeparatedByString(":")
+//        sunriseArr.append(sunriseArr[1].componentsSeparatedByString(" ")[0])
+//        let testArr = _sunrise.componentsSeparatedByString(" ")
+//        sunriseArr.removeAtIndex(1)
+//        sunriseArr.append(testArr[1])
+        
+//        var sunsetArr = _sunset.componentsSeparatedByString(":")
+//        sunsetArr.append(sunsetArr[1].componentsSeparatedByString(" ")[0])
+//        let testsArr = _sunset.componentsSeparatedByString(" ")
+//        sunsetArr.removeAtIndex(1)
+//        sunsetArr.append(testsArr[1])
         
         if Int(currentTime[0])! == 12 && currentTime[2] == "PM" {
             return true
@@ -254,7 +268,7 @@ class Weather {
             
         } else if (Int(currentTime[0])! >= Int(sunriseArr[0])! && currentTime[2] == sunriseArr[2]) {
             
-            if Int(currentTime[1])! >= Int(sunsetArr[1])! {
+            if Int(currentTime[1])! >= Int(sunriseArr[1])! {
                 return true
             } else {
                 return false
