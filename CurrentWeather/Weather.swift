@@ -256,20 +256,28 @@ class Weather {
             
         } else if (Int(currentTime[0])! >= Int(sunriseArr[0])! && currentTime[2] == sunriseArr[2]) {
             
-            if Int(currentTime[1])! >= Int(sunriseArr[1])! {
-                return true
+            if (Int(currentTime[0])! == Int(sunriseArr[0])!) {
+                
+                if Int(currentTime[1])! > Int(sunriseArr[1])! {
+                    return true
+                } else {
+                    return false
+                }
             } else {
-                return false
+                return true
             }
-        
         } else if (Int(currentTime[0])! <= Int(sunsetArr[0])! && currentTime[2] == sunsetArr[2]) {
             
-            if Int(currentTime[1])! < Int(sunsetArr[1])! {
-                return true
+            if (Int(currentTime[0])! == Int(sunsetArr[0])!) {
+                
+                if Int(currentTime[1])! < Int(sunsetArr[1])! {
+                    return true
+                } else {
+                    return false
+                }
             } else {
-                return false
+                return true
             }
-            
         } else {
             return false
         }
