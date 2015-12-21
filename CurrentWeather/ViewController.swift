@@ -8,12 +8,21 @@
 
 import UIKit
 import CoreLocation
+import MBProgressHUD
 
 var latitude: CLLocationDegrees = 43.2065
 var longitude: CLLocationDegrees = -71.5365
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet var locationStack: UIStackView!
+    @IBOutlet var weatherStack: UIStackView!
+    @IBOutlet var sunImgStack: UIStackView!
+    @IBOutlet var sunTimeStack: UIStackView!
+    @IBOutlet var descripStack: UIStackView!
+    @IBOutlet var descripValStack: UIStackView!
+    
+    @IBOutlet var contentView: UIView!
     @IBOutlet weak var timeDay: UILabel!
     @IBOutlet var locationLbl: UILabel!
     @IBOutlet weak var weatherDesc: UILabel!
@@ -38,7 +47,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationMan.desiredAccuracy = kCLLocationAccuracyBest
         locationMan.requestWhenInUseAuthorization()
         locationMan.startUpdatingLocation()
-    
+        
+        hideStacks(true)
         startTime()
         
     }
@@ -64,6 +74,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         timeDay.text = "\(time) \(morningAfternoon) \(day)"
     }
     
+    private func showLoadingHUD() {
+        let hud = MBProgressHUD.showHUDAddedTo(contentView, animated: true)
+        hud.labelText = "Loading..."
+        
+    }
+    
+    private func hideLoadingHUD() {
+        MBProgressHUD.hideAllHUDsForView(contentView, animated: true)
+    }
+    
     func updateUI() {
         
         weather.getImage(weather.weatherId)
@@ -86,13 +106,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func waitForDownload() {
-        
+        showLoadingHUD()
         weather.downloadWeatherDetails { () -> () in
-            
             self.updateUI()
-
+            self.hideStacks(false)
+            self.hideLoadingHUD()
         }
-        
+
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -109,10 +129,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func refreshedPressed(sender: AnyObject) {
+        locationMan.stopUpdatingLocation()
+        locationMan.startUpdatingLocation()
         latitude = locationMan.location!.coordinate.latitude
         longitude = locationMan.location!.coordinate.longitude
         changeLocation(latitude, lon: longitude)
         waitForDownload()
+    }
+    
+    func hideStacks(hide: Bool) {
+        
+        locationStack.hidden = hide
+        weatherStack.hidden = hide
+        sunImgStack.hidden = hide
+        sunTimeStack.hidden = hide
+        descripStack.hidden = hide
+        descripValStack.hidden = hide
         
     }
     

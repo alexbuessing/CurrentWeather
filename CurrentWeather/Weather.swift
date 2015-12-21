@@ -307,7 +307,7 @@ class Weather {
 
     
     func downloadWeatherDetails(completed: DownloadComplete) {
-        
+        NSLog("time 3")
         let url = NSURL(string: _weatherURL)!
         
         Alamofire.request(.GET, url).responseJSON { response in
@@ -373,6 +373,7 @@ class Weather {
                 }
                 
             }
+            NSLog("time 4")
          completed()
         }
     }
